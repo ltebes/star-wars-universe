@@ -1,8 +1,8 @@
+import Router from "./router"
+
 export const StarWarsApp = () => {
   return (
-    <>
-      <h1>StarWarsApp</h1>
-    </>
+    <Router />
   )
 }
 
