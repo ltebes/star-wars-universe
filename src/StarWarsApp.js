@@ -1,8 +1,13 @@
+import { Footer, Header } from "./layouts"
 import Router from "./router"
 
 export const StarWarsApp = () => {
   return (
-    <Router />
+    <>
+      <Header />
+      <Router />
+      <Footer />
+    </>
   )
 }
 
