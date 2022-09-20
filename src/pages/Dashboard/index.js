@@ -1,7 +1,35 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import Table from '../../components/Table';
 import { getAllPlanets } from '../../services';
+import { parseRows } from '../../utils';
 import './styles.scss';
+
+const columns = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Climate',
+    accessor: 'climate',
+  },
+  {
+    Header: 'Gravity',
+    accessor: 'gravity',
+  },
+  {
+    Header: 'Terrain',
+    accessor: 'terrain',
+  },
+  {
+    Header: 'Population',
+    accessor: 'population',
+  },
+  {
+    Header: 'View details',
+    accessor: 'details',
+  },
+];
 
 const Dashboard = () => {
   const [planets, setPlanets] = useState([])
@@ -18,7 +46,7 @@ const Dashboard = () => {
   return (
     <>
       <div>Dashboard</div>
-      <Link to='/planet/7' state={{planet: planets[7]}}>Vamo al planetita</Link>
+      <Table columns={columns} data={planets.length ? parseRows(planets, 'planet') : []} />
     </>
   )
 }

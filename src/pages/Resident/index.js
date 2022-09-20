@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { getResident } from '../../services';
+import { useParams, useLocation } from 'react-router-dom';
+import { getResidentById } from '../../services';
 
 import './styles.scss';
 
 const Resident = () => {
   const [resident, setResident] = useState({})
+  const { state } = useLocation();
   const { id } = useParams();
-  const { state: { residentId } } = useLocation();
 
-  
   useEffect(() => {
     const func = async() => {
-      const resident = await getResident(residentId)
+      const resident = await getResidentById(id);
       setResident(resident);
     };
-    func();
-  }, [residentId]);
+    if(state && state.resident) {
+      setResident(state.resident);
+    } else {
+      func();
+    }
+  }, [id, state]);
 
   console.log("resident:: ", {id, resident});
 
