@@ -42,9 +42,9 @@ const Header = ({ StarWarsStore ={} }) => {
 
   console.log("falopita: ", {planetSelected, residentSelected});
 
-  if(pathname.includes('planet')){
+  if(planetSelected && pathname.includes('planet')){
     levels.push({text: planetSelected.name, id: 1, to: '/planet/1', disabled: pathname.includes('planet') })
-  } else if (pathname.includes('resident')){
+  } else if (residentSelected && pathname.includes('resident')){
     levels.push({text: planetSelected.name, id: 1, to: '/planet/1', disabled: pathname.includes('planet') })
     levels.push({text: residentSelected.name, id: 2, to: '/resident/1', disabled: pathname.includes('resident') });
   }

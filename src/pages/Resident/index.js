@@ -1,30 +1,36 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { getResidentById } from '../../services';
+import { getPlanetbyId, getResidentById } from '../../services';
+import { getPlanetId } from '../../utils';
 
 import './styles.scss';
 
 const Resident = ({ StarWarsStore }) => {
-  const { residentSelected, planetSelected, setResidentSelected } = StarWarsStore;
+  const { residentSelected, planetSelected, setPlanetAndResidentSelected } = StarWarsStore;
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const func = async() => {
+    const getResidentAndItsPlanet = async() => {
       const r = await getResidentById(id);
-      setResidentSelected(r);
+      if(r.detail === 'Not found') {
+        navigate("/not-found")
+      }
+      const p = await getPlanetbyId(getPlanetId(r?.homeworld));
+      setPlanetAndResidentSelected(r, p);
     };
     if(!residentSelected) {
-      func();
+      getResidentAndItsPlanet();
     }
-  }, [id, residentSelected, setResidentSelected]);
+  }, [id, navigate, residentSelected, setPlanetAndResidentSelected]);
 
   console.log("resident:: ", {id, residentSelected, planetSelected});
 
   return (
     <div>
-      <h1>Planet: {planetSelected.name}</h1>
-      <h1>Resident: {residentSelected.name}</h1>
+      <h1>Planet: {planetSelected?.name}</h1>
+      <h1>Resident: {residentSelected?.name}</h1>
     </div>
   )
 }

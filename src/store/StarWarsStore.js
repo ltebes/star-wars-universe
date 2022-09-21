@@ -15,6 +15,8 @@ class StarWarsStore {
         setPlanets: action,
         setPlanetSelected: action,
         setResidentSelected: action,
+        setPlanetAndResidents: action,
+        setPlanetAndResidentSelected: action,
     })
 }
 
@@ -32,6 +34,16 @@ class StarWarsStore {
 
   setResidentSelected = resident => {
     this.residentSelected = resident;
+  }
+ 
+  setPlanetAndResidents = (planet, residents) => {
+    this.planetSelected = planet;
+    this.residents = residents;
+  }
+
+  setPlanetAndResidentSelected = (resident, planet) => {
+    this.residentSelected = resident;
+    this.planetSelected = planet;
   }
 };
 

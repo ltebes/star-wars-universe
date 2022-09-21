@@ -1,62 +1,38 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getPlanetbyId, getAllResidents } from '../../services';
-import { parseRows } from '../../utils';
+import { parseRows, residentsColumns } from '../../utils';
 import './styles.scss';
 
-const columns = [
-  {
-    Header: 'Name',
-    accessor: 'name',
-  },
-  {
-    Header: 'Height',
-    accessor: 'height',
-  },
-  {
-    Header: 'Mass',
-    accessor: 'mass',
-  },
-  {
-    Header: 'Birth_year',
-    accessor: 'birth_year',
-  },
-  {
-    Header: 'Gender',
-    accessor: 'gender',
-  },
-  {
-    Header: 'View details',
-    accessor: 'details',
-  },
-];
-
 const Planet = ({ StarWarsStore }) => {
-  const { planetSelected, residents, setResidentSelected, setResidents, setPlanetSelected } = StarWarsStore;
+  const { planetSelected, residents, setResidentSelected, setResidents, setPlanetAndResidents } = StarWarsStore;
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const func = async() => {
+    const getPlanetAndResidents = async() => {
       const p = await getPlanetbyId(id)
-      setPlanetSelected(p);
+      if(p.detail === 'Not found') {
+        navigate("/not-found")
+      }
+      const r = await getAllResidents(p.residents);
+      setPlanetAndResidents(p, r);
     };
 
-    if(!planetSelected) {
-      func();
-    }
-  }, [id, planetSelected, setPlanetSelected]);
-
-  useEffect(() => {
-    const func = async() => {
+    const getResidents = async() => {
       const residents = await getAllResidents(planetSelected.residents);
       setResidents(residents);
     };
-    if(planetSelected && planetSelected.residents){
-      func();
+
+    if(!planetSelected) {
+      getPlanetAndResidents();
+      console.log("PASOOOOOOO");
+    } else if (planetSelected.residents){
+      getResidents();
     }
-  }, [planetSelected, setResidents]);
+  }, [id, navigate, planetSelected, setPlanetAndResidents, setResidents]);
 
   
   console.log("StarWarsStore: ", {StarWarsStore});
@@ -71,7 +47,7 @@ const Planet = ({ StarWarsStore }) => {
   return (
     <>
       <div>Planet</div>
-      <Table columns={columns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
+      <Table columns={residentsColumns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
     </>
   )
 }
