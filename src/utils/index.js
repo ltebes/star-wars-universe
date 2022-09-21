@@ -9,11 +9,12 @@ const parseObj = {
   resident: getResidentId, 
 }
 
-export const parseRows = (objs, type) => (
+export const parseRows = (objs, type, onClick) => (
   objs.map((obj) => {
     const { url, ...rest } = obj;
     return {
-      ...rest, details: (<Link to={`/${type}/${parseObj[type](url)}`} state={{[type]: obj}}>Vamo</Link>)
+      ...rest, 
+      details: (<Link to={`/${type}/${parseObj[type](url)}`} onClick={() => onClick(obj)}>Vamo</Link>)
     };
   })
 );

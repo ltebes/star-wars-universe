@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { Dashboard, Planet, Resident } from '../pages';
 
 const Router = () => {
@@ -7,7 +7,7 @@ const Router = () => {
       <Route path="/dashboard" element={ <Dashboard /> } />
       <Route path="/planet/:id" element={ <Planet /> } />
       <Route path="/resident/:id" element={ <Resident /> } />
-      <Route path="/*" element={ <Dashboard /> } />
+      <Route path="/*" element={ <Navigate to="/dashboard" replace /> } />
     </Routes>
   )
 }

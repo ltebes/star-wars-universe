@@ -1,31 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { getResidentById } from '../../services';
 
 import './styles.scss';
 
-const Resident = () => {
-  const [resident, setResident] = useState({})
-  const { state } = useLocation();
+const Resident = ({ StarWarsStore }) => {
+  const { residentSelected, planetSelected, setResidentSelected } = StarWarsStore;
   const { id } = useParams();
 
   useEffect(() => {
     const func = async() => {
-      const resident = await getResidentById(id);
-      setResident(resident);
+      const r = await getResidentById(id);
+      setResidentSelected(r);
     };
-    if(state && state.resident) {
-      setResident(state.resident);
-    } else {
+    if(!residentSelected) {
       func();
     }
-  }, [id, state]);
+  }, [id, residentSelected, setResidentSelected]);
 
-  console.log("resident:: ", {id, resident});
+  console.log("resident:: ", {id, residentSelected, planetSelected});
 
   return (
-    <div>Resident</div>
+    <div>
+      <h1>Planet: {planetSelected.name}</h1>
+      <h1>Resident: {residentSelected.name}</h1>
+    </div>
   )
 }
 
-export default Resident;
+export default inject("StarWarsStore")(observer(Resident));

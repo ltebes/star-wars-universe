@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getPlanetbyId, getAllResidents } from '../../services';
 import { parseRows } from '../../utils';
@@ -32,46 +33,47 @@ const columns = [
   },
 ];
 
-const Planet = () => {
-  const [planet, setPlanet] = useState({});
-  const [residents, setResidents] = useState([]);
-  const { state } = useLocation();
+const Planet = ({ StarWarsStore }) => {
+  const { planetSelected, residents, setResidentSelected, setResidents, setPlanetSelected } = StarWarsStore;
   const { id } = useParams();
 
-  console.log("state: ", state);
-
-
   useEffect(() => {
     const func = async() => {
-      const planets = await getPlanetbyId(id)
-      setPlanet(planets);
+      const p = await getPlanetbyId(id)
+      setPlanetSelected(p);
     };
-    if(state && state.planet) {
-      setPlanet(state.planet);
-    } else {
+
+    if(!planetSelected) {
       func();
     }
-  }, [id, state]);
+  }, [id, planetSelected, setPlanetSelected]);
 
   useEffect(() => {
     const func = async() => {
-      const residents = await getAllResidents(planet.residents);
+      const residents = await getAllResidents(planetSelected.residents);
       setResidents(residents);
     };
-    if(planet.residents){
+    if(planetSelected && planetSelected.residents){
       func();
     }
-  }, [planet]);
+  }, [planetSelected, setResidents]);
 
-  console.log("planet: ", planet);
-  console.log("residents: ", residents);
+  
+  console.log("StarWarsStore: ", {StarWarsStore});
+  console.log("planet: ", {planetSelected});
+  console.log("residents: ", {residents});
+
+  const handleClick = resident => {
+    console.log("resident selected:: ", resident);
+    setResidentSelected(resident);
+  }
 
   return (
     <>
       <div>Planet</div>
-      <Table columns={columns} data={residents.length ? parseRows(residents, 'resident') : []} />
+      <Table columns={columns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
     </>
   )
 }
 
-export default Planet;
+export default inject("StarWarsStore")(observer(Planet));

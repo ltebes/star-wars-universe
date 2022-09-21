@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getAllPlanets } from '../../services';
 import { parseRows } from '../../utils';
@@ -31,24 +32,30 @@ const columns = [
   },
 ];
 
-const Dashboard = () => {
-  const [planets, setPlanets] = useState([])
-  
+const Dashboard = ({ StarWarsStore }) => {
+  const { planets, setPlanets, setPlanetSelected } = StarWarsStore;
+
   useEffect(() => {
     const func = async() => {
-      const planets = await getAllPlanets()
-      setPlanets(planets);
+      const p = await getAllPlanets();
+      setPlanets(p);
     };
     func();
-  }, []);
-  console.log("planets:: ", planets);
+  }, [setPlanets]);
+  
+  console.log("planets:: ", {planets});
+
+  const handleClick = planet => {
+    console.log("planet selected:: ", planet);
+    setPlanetSelected(planet);
+  }
 
   return (
     <>
       <div>Dashboard</div>
-      <Table columns={columns} data={planets.length ? parseRows(planets, 'planet') : []} />
+      <Table paginated columns={columns} data={planets.length ? parseRows(planets, 'planet', handleClick) : []} />
     </>
   )
 }
 
-export default Dashboard;
+export default inject("StarWarsStore")(observer(Dashboard));
