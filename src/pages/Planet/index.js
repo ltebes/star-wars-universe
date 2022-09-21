@@ -47,7 +47,9 @@ const Planet = ({ StarWarsStore }) => {
   return (
     <>
       <div>Planet</div>
-      <Table columns={residentsColumns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
+      {residents.length === 0 ? <h1>Sin Residentes</h1> :
+        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
+      }
     </>
   )
 }

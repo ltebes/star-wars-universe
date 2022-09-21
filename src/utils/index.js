@@ -14,7 +14,7 @@ export const parseRows = (objs, type, onClick) => (
     const { url, ...rest } = obj;
     return {
       ...rest, 
-      details: (<Link to={`/${type}/${parseObj[type](url)}`} onClick={() => onClick(obj)}>Vamo</Link>)
+      details: (<Link to={`/${type}/${parseObj[type](url)}`} onClick={() => onClick(obj)}>View more...</Link>)
     };
   })
 );
@@ -41,8 +41,8 @@ export const planetsColumns = [
     accessor: 'population',
   },
   {
-    Header: 'View details',
-    accessor: 'details',
+    Header: '',
+    accessor: 'view_more',
   },
 ];
 
@@ -60,7 +60,7 @@ export const residentsColumns = [
     accessor: 'mass',
   },
   {
-    Header: 'Birth_year',
+    Header: 'Birth year',
     accessor: 'birth_year',
   },
   {
@@ -68,7 +68,7 @@ export const residentsColumns = [
     accessor: 'gender',
   },
   {
-    Header: 'View details',
-    accessor: 'details',
+    Header: '',
+    accessor: 'view_more',
   },
 ];

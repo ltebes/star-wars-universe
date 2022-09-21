@@ -1,17 +1,20 @@
-import { makeObservable, observable, action } from "mobx";
+import { makeObservable, observable, action, computed } from "mobx";
 
 class StarWarsStore {
   planets = [];
   planetSelected = null;
   residents = [];
   residentSelected = null;
+  search = '';
 
   constructor() {
     makeObservable(this, {
         planets: observable,
+        filteredPlanets: computed,
         planetSelected: observable,
         residents: observable,
         residentSelected: observable,
+        search: observable,
         setPlanets: action,
         setPlanetSelected: action,
         setResidentSelected: action,
@@ -22,6 +25,10 @@ class StarWarsStore {
 
   setPlanets = planets => {
     this.planets = planets;
+  }
+
+  get filteredPlanets() {
+    return this.planets.filter(planet => planet.name.toLowerCase().includes(this.search.toLowerCase()));
   }
   
   setPlanetSelected = planet => {
@@ -44,6 +51,10 @@ class StarWarsStore {
   setPlanetAndResidentSelected = (resident, planet) => {
     this.residentSelected = resident;
     this.planetSelected = planet;
+  }
+
+  setSearch = search => {
+    this.search = search;
   }
 };
 

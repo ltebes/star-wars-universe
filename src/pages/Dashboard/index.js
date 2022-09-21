@@ -4,10 +4,10 @@ import Table from '../../components/Table';
 import { getAllPlanets } from '../../services';
 import { parseRows, planetsColumns } from '../../utils';
 import './styles.scss';
+import Search from '../../components/Search';
 
 const Dashboard = ({ StarWarsStore }) => {
-  const { planets, setPlanets, setPlanetSelected } = StarWarsStore;
-
+  const { filteredPlanets, setPlanets, setPlanetSelected } = StarWarsStore;
   useEffect(() => {
     const getPlanets = async() => {
       const p = await getAllPlanets();
@@ -16,17 +16,19 @@ const Dashboard = ({ StarWarsStore }) => {
     getPlanets();
   }, [setPlanets]);
   
-  console.log("planets:: ", {planets});
+  console.log("planets:: ", {filteredPlanets, planets: StarWarsStore.planets});
 
   const handleClick = planet => {
     console.log("planet selected:: ", planet);
     setPlanetSelected(planet);
   }
 
+
   return (
     <>
       <div>Dashboard</div>
-      <Table paginated columns={planetsColumns} data={planets.length ? parseRows(planets, 'planet', handleClick) : []} />
+      <Search />
+      <Table paginated columns={planetsColumns} data={filteredPlanets.length ? parseRows(filteredPlanets, 'planet', handleClick) : []} />
     </>
   )
 }
