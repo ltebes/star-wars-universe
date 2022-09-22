@@ -7,20 +7,18 @@ import { getPlanetId } from '../../utils';
 import './styles.scss';
 
 const Resident = ({ StarWarsStore }) => {
-  const { setLoading, residentSelected, planetSelected, setPlanetAndResidentSelected } = StarWarsStore;
+  const { residentSelected, planetSelected, setPlanetAndResidentSelected } = StarWarsStore;
   const { id } = useParams();
   const navigate = useNavigate();
 
   const getResidentAndItsPlanet = useCallback(async() => {
-    setLoading(true);
     const r = await getResidentById(id);
-    if(Boolean(r) || r.detail === 'Not found') {
+    if(!Boolean(r) || r.detail === 'Not found') {
       navigate("/not-found")
     }
     const p = await getPlanetbyId(getPlanetId(r.homeworld));
     setPlanetAndResidentSelected(r, p);
-    setLoading(false);
-  }, [id, navigate, setLoading, setPlanetAndResidentSelected]);
+  }, [id, navigate, setPlanetAndResidentSelected]);
 
   useEffect(() => {
     if(!residentSelected) {

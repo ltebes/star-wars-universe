@@ -8,7 +8,6 @@ class StarWarsStore {
   search = '';
   searchField = 'name';
   filterFields = [];
-  loading = false;
 
   constructor() {
     makeObservable(this, {
@@ -20,7 +19,6 @@ class StarWarsStore {
       search: observable,
       searchField: observable,
       filterFields: observable,
-      loading: observable,
       setPlanets: action,
       setPlanetSelected: action,
       setResidentSelected: action,
@@ -30,7 +28,6 @@ class StarWarsStore {
       setSearchField: action,
       setFilterFields: action,
       deleteFilterFields: action,
-      setLoading: action,
     })
 }
 
@@ -48,6 +45,8 @@ class StarWarsStore {
   
   setPlanetSelected = planet => {
     this.planetSelected = planet;
+    this.residentSelected = null;
+    this.residents = [];
   }
   
   setResidents = residents => {
@@ -82,10 +81,6 @@ class StarWarsStore {
   
   deleteFilterFields = ({ key, value }) => {
     this.filterFields = this.filterFields.filter(field => field.key !== key || field.value !== value);
-  }
-  
-  setLoading = loading => {
-    this.loading = loading;
   }
 };
 

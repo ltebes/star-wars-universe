@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getPlanetbyId, getAllResidents } from '../../services';
-import { getResidentId, parseRows } from '../../utils';
-import { residentsColumns } from '../../config';
+import { delay, getResidentId, parseRows } from '../../utils';
+import { residentsColumns, residentsSkeletonData } from '../../config';
 
 import './styles.scss';
 
@@ -15,17 +15,17 @@ const Planet = ({ StarWarsStore }) => {
 
   const getPlanetAndResidents = useCallback(async() => {
     const p = await getPlanetbyId(id)
-    if(Boolean(p) || p.detail === 'Not found') {
-      navigate("/not-found")
+    if(!Boolean(p) || p.detail === 'Not found') {
+      navigate("/not-found");
     }
     const r = await getAllResidents(p.residents);
     setPlanetAndResidents(p, r);
   }, [id, navigate, setPlanetAndResidents]);
   
   const getResidents = useCallback(async() => {
-    const residents = await getAllResidents(planetSelected.residents);
+    const [ residents ] = await Promise.all([getAllResidents(planetSelected.residents), delay(3000)]);
     setResidents(residents);
-  }, [planetSelected.residents, setResidents]);
+  }, [planetSelected?.residents, setResidents]);
 
   useEffect(() => {
     if(!planetSelected) {
@@ -48,8 +48,8 @@ const Planet = ({ StarWarsStore }) => {
 
   return (
     <>
-      {residents.length === 0 ? <h1>Sin Residentes</h1> :
-        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, handleClick) : []} />
+      {planetSelected?.residents.length === 0 ? <h1>Sin Residentes</h1> :
+        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, handleClick) : residentsSkeletonData} />
       }
     </>
   )

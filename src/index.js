@@ -1,11 +1,14 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import './index.scss';
 import { StarWarsApp } from './StarWarsApp';
+import { SkeletonTheme } from 'react-loading-skeleton'
+import './index.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <StarWarsApp />
-  </BrowserRouter>
+  <SkeletonTheme baseColor="#313131" highlightColor="#525252">
+    <BrowserRouter>
+      <StarWarsApp />
+    </BrowserRouter>
+  </SkeletonTheme>
 );

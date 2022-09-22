@@ -1,6 +1,7 @@
 import { FiChevronRight as Chevron } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
+import { APP_NAME } from "../../config";
 import './styles.scss';
 
 const Breadcrumb = ({ levels, className }) => {
@@ -53,7 +54,7 @@ const Header = ({ StarWarsStore ={} }) => {
 
   return (
     <div className="header">
-      <h1 className="header__title">Header</h1>
+      <h1 className="header__title">{APP_NAME}</h1>
       <Breadcrumb className="header__breadcrumb" levels={levels} />
     </div>
   )
