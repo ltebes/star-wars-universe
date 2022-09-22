@@ -6,20 +6,31 @@ class StarWarsStore {
   residents = [];
   residentSelected = null;
   search = '';
+  searchField = 'name';
+  filterFields = [];
+  loading = false;
 
   constructor() {
     makeObservable(this, {
-        planets: observable,
-        filteredPlanets: computed,
-        planetSelected: observable,
-        residents: observable,
-        residentSelected: observable,
-        search: observable,
-        setPlanets: action,
-        setPlanetSelected: action,
-        setResidentSelected: action,
-        setPlanetAndResidents: action,
-        setPlanetAndResidentSelected: action,
+      planets: observable,
+      filteredPlanets: computed,
+      planetSelected: observable,
+      residents: observable,
+      residentSelected: observable,
+      search: observable,
+      searchField: observable,
+      filterFields: observable,
+      loading: observable,
+      setPlanets: action,
+      setPlanetSelected: action,
+      setResidentSelected: action,
+      setPlanetAndResidents: action,
+      setPlanetAndResidentSelected: action,
+      setSearch: action,
+      setSearchField: action,
+      setFilterFields: action,
+      deleteFilterFields: action,
+      setLoading: action,
     })
 }
 
@@ -28,7 +39,11 @@ class StarWarsStore {
   }
 
   get filteredPlanets() {
-    return this.planets.filter(planet => planet.name.toLowerCase().includes(this.search.toLowerCase()));
+    return [...this.filterFields, {key: this.searchField, value: this.search}].reduce((accumulator, current) => (
+      accumulator.filter(planet => (
+        planet[current.key].toLowerCase().includes(current.value.toLowerCase())
+      ))
+    ), this.planets)
   }
   
   setPlanetSelected = planet => {
@@ -55,6 +70,22 @@ class StarWarsStore {
 
   setSearch = search => {
     this.search = search;
+  }
+  
+  setSearchField = searchField => {
+    this.searchField = searchField;
+  }
+
+  setFilterFields = searchField => {
+    this.filterFields.push(searchField);
+  }
+  
+  deleteFilterFields = ({ key, value }) => {
+    this.filterFields = this.filterFields.filter(field => field.key !== key || field.value !== value);
+  }
+  
+  setLoading = loading => {
+    this.loading = loading;
   }
 };
 

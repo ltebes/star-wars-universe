@@ -1,22 +1,12 @@
-import { Link } from "react-router-dom";
-
 export const getResidentId = url => (url.replace('https://swapi.dev/api/people/', '')).slice(0, -1);
 
 export const getPlanetId = url => (url.replace('https://swapi.dev/api/planets/', '')).slice(0, -1);
 
-const parseObj = {
-  planet: getPlanetId,
-  resident: getResidentId, 
-}
-
-export const parseRows = (objs, type, onClick) => (
-  objs.map((obj) => {
-    const { url, ...rest } = obj;
-    return {
-      ...rest, 
-      details: (<Link to={`/${type}/${parseObj[type](url)}`} onClick={() => onClick(obj)}>View more...</Link>)
-    };
-  })
+export const parseRows = (objs, onClick) => (
+  objs.map((obj) => ({
+    ...obj, 
+    view_more: (<button onClick={() => onClick(obj)}>View more...</button>)
+  }))
 );
 
 export const planetsColumns = [

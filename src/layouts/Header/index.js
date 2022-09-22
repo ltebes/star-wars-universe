@@ -1,6 +1,7 @@
 import { FiChevronRight as Chevron } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
+import './styles.scss';
 
 const Breadcrumb = ({ levels, className }) => {
   const innerLevels = levels.map((level, index) => {
@@ -36,6 +37,7 @@ const Breadcrumb = ({ levels, className }) => {
 const Header = ({ StarWarsStore ={} }) => {
   const { planetSelected, residentSelected } = StarWarsStore;
   let { pathname } = useLocation();
+
   const levels = [
     {text: 'All Planets', id: 0, to: '/dashboard', disabled: pathname.includes('dashboard') },
   ]
@@ -50,10 +52,10 @@ const Header = ({ StarWarsStore ={} }) => {
   }
 
   return (
-    <>
-      <div>Header</div>
-      <Breadcrumb levels={levels} />
-    </>
+    <div className="header">
+      <h1 className="header__title">Header</h1>
+      <Breadcrumb className="header__breadcrumb" levels={levels} />
+    </div>
   )
 };
 

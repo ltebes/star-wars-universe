@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getPlanetbyId, getAllResidents } from '../../services';
-import { parseRows, residentsColumns } from '../../utils';
+import { getResidentId, parseRows, residentsColumns } from '../../utils';
 import './styles.scss';
 
 const Planet = ({ StarWarsStore }) => {
@@ -42,13 +42,13 @@ const Planet = ({ StarWarsStore }) => {
   const handleClick = resident => {
     console.log("resident selected:: ", resident);
     setResidentSelected(resident);
+    navigate(`/resident/${getResidentId(resident.url)}`)
   }
 
   return (
     <>
-      <div>Planet</div>
       {residents.length === 0 ? <h1>Sin Residentes</h1> :
-        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, 'resident', handleClick) : []} />
+        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, handleClick) : []} />
       }
     </>
   )
