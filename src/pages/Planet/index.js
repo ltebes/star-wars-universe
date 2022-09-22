@@ -3,7 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
 import { getPlanetbyId, getAllResidents } from '../../services';
-import { getResidentId, parseRows, residentsColumns } from '../../utils';
+import { getResidentId, parseRows } from '../../utils';
+import { residentsColumns } from '../../config';
+
 import './styles.scss';
 
 const Planet = ({ StarWarsStore }) => {

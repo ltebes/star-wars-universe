@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { useNavigate } from "react-router-dom";
 import Table from '../../components/Table';
 import { getAllPlanets } from '../../services';
-import { getPlanetId, parseRows, planetsColumns } from '../../utils';
+import { getPlanetId, parseRows } from '../../utils';
+import { planetsColumns } from '../../config';
 import Search from '../../components/Search';
 import './styles.scss';
 
