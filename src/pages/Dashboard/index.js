@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { inject, observer } from 'mobx-react';
 import { useNavigate } from "react-router-dom";
 import Table from '../../components/Table';
@@ -9,16 +9,19 @@ import Search from '../../components/Search';
 import './styles.scss';
 
 const Dashboard = ({ StarWarsStore }) => {
-  const navigate = useNavigate();
   const { filteredPlanets, setPlanets, setPlanetSelected } = StarWarsStore;
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const getPlanets = async() => {
-      const p = await getAllPlanets();
-      setPlanets(p);
-    };
-    getPlanets();
+  const getPlanets = useCallback(async() => {
+    console.log("start")
+    const p = getAllPlanets();
+    console.log("finish")
+    setPlanets(p);
   }, [setPlanets]);
+  
+  useEffect(() => {
+    getPlanets();
+  }, [getPlanets, setPlanets]);
   
   console.log("planets:: ", {filteredPlanets, planets: StarWarsStore.planets});
 

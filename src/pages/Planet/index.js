@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Table from '../../components/Table';
@@ -13,28 +13,27 @@ const Planet = ({ StarWarsStore }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const getPlanetAndResidents = useCallback(async() => {
+    const p = await getPlanetbyId(id)
+    if(Boolean(p) || p.detail === 'Not found') {
+      navigate("/not-found")
+    }
+    const r = await getAllResidents(p.residents);
+    setPlanetAndResidents(p, r);
+  }, [id, navigate, setPlanetAndResidents]);
+  
+  const getResidents = useCallback(async() => {
+    const residents = await getAllResidents(planetSelected.residents);
+    setResidents(residents);
+  }, [planetSelected.residents, setResidents]);
+
   useEffect(() => {
-    const getPlanetAndResidents = async() => {
-      const p = await getPlanetbyId(id)
-      if(p.detail === 'Not found') {
-        navigate("/not-found")
-      }
-      const r = await getAllResidents(p.residents);
-      setPlanetAndResidents(p, r);
-    };
-
-    const getResidents = async() => {
-      const residents = await getAllResidents(planetSelected.residents);
-      setResidents(residents);
-    };
-
     if(!planetSelected) {
       getPlanetAndResidents();
-      console.log("PASOOOOOOO");
     } else if (planetSelected.residents){
       getResidents();
     }
-  }, [id, navigate, planetSelected, setPlanetAndResidents, setResidents]);
+  }, [getPlanetAndResidents, getResidents, planetSelected]);
 
   
   console.log("StarWarsStore: ", {StarWarsStore});
