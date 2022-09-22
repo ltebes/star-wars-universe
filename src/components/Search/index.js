@@ -1,5 +1,6 @@
 import { inject, observer } from 'mobx-react';
 import { FiX as Cross } from "react-icons/fi";
+import Button from '../Button';
 import Dropdown from '../Dropdown';
 
 const Search = ({ StarWarsStore }) => {
@@ -20,7 +21,7 @@ const Search = ({ StarWarsStore }) => {
       <div>Search</div>
       <input placeholder='Filter...' value={search} onChange={handleChange} type="text" />
       <Dropdown items={['name', 'climate', 'gravity', 'terrain']}/>
-      <button disabled={search === ''} onClick={handleClick}>Add Filter</button>
+      <Button disabled={search === ''} onClick={handleClick}>Add Filter</Button>
 
       <div>
         {filterFields.map(({ key, value }) => (

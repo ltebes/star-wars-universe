@@ -1,6 +1,7 @@
 import { useTable, usePagination } from 'react-table'
 
 import React from 'react'
+import Button from '../Button'
 
 const WrapTable = ({ paginated, ...restProps }) => {
 
@@ -28,8 +29,7 @@ const TablePaginated = ({ columns, data }) => {
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize }
+    state: { pageIndex }
   } = useTable({
     columns,
     data,
@@ -67,24 +67,24 @@ const TablePaginated = ({ columns, data }) => {
         This is just a very basic UI implementation:
       */}
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        </Button>{' '}
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {'<'}
-        </button>{' '}
+        </Button>{' '}
         <span>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </span>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
           {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        </Button>{' '}
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {'>>'}
-        </button>{' '}
+        </Button>{' '}
       </div>
     </>
   );
