@@ -5,22 +5,28 @@ const getNumberOfPages = (countPerPage, totalCount) => {
 }
 
 export const getAllPlanets = async() => {
-  const { planets, count } = await getFirstPagePlanets();
-  const restPlanets = await parallelGetPlanets(getNumberOfPages(planets.length, count));
-  return [...planets, ...restPlanets];
+  try {
+    const { planets, count } = await getFirstPagePlanets();
+    const restPlanets = await parallelGetPlanets(getNumberOfPages(planets.length, count));
+    return [...planets, ...restPlanets];
+  } catch(err) {
+    handleError(err);
+  }
 }
-
 
 export const getPlanetbyId = async( id ) => {
-  const url = `${BASE_PATH}/planets/${id}`;
-  const resp = await fetch(url);
-  
-  const planet = await resp.json();
-  
-  return planet;
+  try {
+    const url = `${BASE_PATH}/planets/${id}`;
+    const resp = await fetch(url);
+    const planet = await resp.json();
+
+    return planet;
+  } catch(err) {
+    handleError(err);
+  }
 }
 
-export const getFirstPagePlanets = async() => {
+const getFirstPagePlanets = async() => {
   const url = `${BASE_PATH}/planets`;
   const resp = await fetch(url);
   
@@ -29,7 +35,7 @@ export const getFirstPagePlanets = async() => {
   return { planets, count };
 }
 
-export const parallelGetPlanets = async( numberOfPages ) => {
+const parallelGetPlanets = async( numberOfPages ) => {
   let promisesArr = []
   for (let index = 2; index <= numberOfPages; index++) {
     promisesArr.push(fetch(`${BASE_PATH}/planets/?page=${index}`))
@@ -47,31 +53,47 @@ export const parallelGetPlanets = async( numberOfPages ) => {
  * @deprecated because parallel is more efficient
  */
 export const recursiveGetPlanets = async( currentPage ) => {
-  const url = currentPage ?? `${BASE_PATH}/planets/?page=2`
-  const resp = await fetch(url);
-  const { results: planets, next } = await resp.json();
-  let nextPage = [];
-  
-  if (next) {
-    nextPage = await recursiveGetPlanets(next);
+  try {
+    const url = currentPage ?? `${BASE_PATH}/planets/?page=2`
+    const resp = await fetch(url);
+    const { results: planets, next } = await resp.json();
+    let nextPage = [];
+    
+    if (next) {
+      nextPage = await recursiveGetPlanets(next);
+    }
+    
+    return [...planets, ...nextPage];
+  } catch(err) {
+    handleError(err);
   }
-  
-  return [...planets, ...nextPage];
 }
 
 export const getResidentById = async( id ) => {
-  const url = `${BASE_PATH}/people/${id}`;
-  const resp = await fetch(url);
-  const resident = await resp.json();
-
-  return resident;
+  try {
+    const url = `${BASE_PATH}/people/${id}`;
+    const resp = await fetch(url);
+    const resident = await resp.json();
+  
+    return resident;
+  } catch(err) {
+    handleError(err);
+  }
 }
 
 export const getAllResidents = async( residentsArr ) => {
-  const promisesArr = residentsArr.map(res => fetch(res));
+  try {
+    const promisesArr = residentsArr.map(res => fetch(res));
+  
+    const resps = await Promise.all(promisesArr);
+    const residents = await Promise.all(resps.map(resp => (resp.json())));
+  
+    return residents;
+  } catch(err) {
+    handleError(err);
+  }
+}
 
-  const resps = await Promise.all(promisesArr);
-  const residents = await Promise.all(resps.map(resp => (resp.json())));
-
-  return residents;
+const handleError = err => {
+  console.error(err);
 }
