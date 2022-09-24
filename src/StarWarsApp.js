@@ -7,7 +7,9 @@ export const StarWarsApp = () => {
   return (
     <Provider StarWarsStore={StarWarsStore} >
       <Header />
-      <Router />
+      <div className="app-body">
+        <Router />
+      </div>
       <Footer />
     </Provider>
   )

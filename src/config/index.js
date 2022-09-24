@@ -1,7 +1,7 @@
-import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css'
 
-export const APP_NAME = 'Star Wars Universe';
+export const APP_NAME = 'Star Wars universe';
+
+export const dropdownFields = ['name', 'climate', 'gravity', 'terrain'];
 
 export const planetsColumns = [
   {
@@ -29,25 +29,6 @@ export const planetsColumns = [
     accessor: 'view_more',
   },
 ];
-const planetSkeletonData = {
-  name: <Skeleton />,
-  climate: <Skeleton />,
-  gravity: <Skeleton />,
-  terrain: <Skeleton />,
-  population: <Skeleton />,
-  view_more: <Skeleton />,
-};
-export const planetsSkeletonData = Array(10).fill(planetSkeletonData)
-
-const residentSkeletonData = {
-  name: <Skeleton />,
-  height: <Skeleton />,
-  mass: <Skeleton />,
-  birth_year: <Skeleton />,
-  gender: <Skeleton />,
-  view_more: <Skeleton />,
-};
-export const residentsSkeletonData = Array(6).fill(residentSkeletonData)
 
 export const residentsColumns = [
   {

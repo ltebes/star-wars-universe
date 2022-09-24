@@ -1,16 +1,14 @@
 import { useTable, usePagination } from 'react-table'
-
-import React from 'react'
-import Button from '../Button'
+import { Button } from "../";
+import './styles.scss';
 
 const WrapTable = ({ paginated, ...restProps }) => {
-
   if (paginated) {
     return <TablePaginated {...restProps} />
   } 
   return <Table {...restProps} />
-
 }
+
 const TablePaginated = ({ columns, data }) => {
 
   const {
@@ -18,10 +16,7 @@ const TablePaginated = ({ columns, data }) => {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page, // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
+    page,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -39,7 +34,7 @@ const TablePaginated = ({ columns, data }) => {
 
   return (
     <>
-      <table {...getTableProps()}>
+      <table className='paginated-table' {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -62,10 +57,6 @@ const TablePaginated = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      {/*
-        Pagination can be built however you'd like.
-        This is just a very basic UI implementation:
-      */}
       <div className="pagination">
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -102,20 +93,13 @@ const Table = ({ columns, data }) => {
 
   return (
     <>
-      <div>Table</div>
-      <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+      <table  className='basic-table' {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps()}
-                  // style={{
-                  //   borderBottom: 'solid 3px red',
-                  //   background: 'aliceblue',
-                  //   color: 'black',
-                  //   fontWeight: 'bold',
-                  // }}
                 >
                   {column.render('Header')}
                 </th>
@@ -132,11 +116,6 @@ const Table = ({ columns, data }) => {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      // style={{
-                      //   padding: '10px',
-                      //   border: 'solid 1px gray',
-                      //   background: 'papayawhip',
-                      // }}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -151,4 +130,4 @@ const Table = ({ columns, data }) => {
   )
 }
 
-export default WrapTable
+export default WrapTable;

@@ -1,0 +1,61 @@
+@import '../../styles/variables.scss';
+
+.paginated-table, .basic-table {
+  background-color: antiquewhite
+}
+
+.pagination {
+  margin-top: 10px;
+}
+
+table {
+  text-transform: unset;
+  box-shadow: 0 5px 10px grey;
+  color: black;
+  text-align: left;
+  overflow: hidden;
+}
+
+thead {
+  box-shadow: 0 5px 10px gray;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(228, 214, 196);
+}
+
+th:last-child {
+  padding: 0 2.5rem;
+}
+
+th {
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+td:last-child {
+  padding: 0.5rem 0;
+}
+
+td {
+  padding: 0 1rem;
+}
+
+.basic-table {
+  .table-button {
+    background-color: $yellow-app;
+    padding: 3px 7px;
+  }
+}
+
+.paginated-table {
+  .table-button {
+    background-color: $yellow-app;
+    border-color: lavender;
+    white-space: nowrap;
+    text-align: center;
+  }
+}

@@ -1,0 +1,31 @@
+.resident {
+  margin-top: 18vh;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  
+  h1 {
+    align-self: center;
+  }
+  
+  &__info {
+    h3, h5 {
+      display: inline-block;
+    }
+    h3 {
+      margin-right: 5px;
+    }
+  }
+
+  &__skeleton {
+    &-title {
+      margin: 20px 0;
+      height: 38px;
+    }
+    &-info {
+      height: 22px;
+      margin: 20px 0;
+      width: 35% !important;
+    }
+  }
+}

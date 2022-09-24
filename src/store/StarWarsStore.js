@@ -76,7 +76,12 @@ class StarWarsStore {
   }
 
   setFilterFields = searchField => {
-    this.filterFields.push(searchField);
+    const exist = this.filterFields.some(({ key, value }) => (
+      searchField.key === key && searchField.value === value
+    ));
+    if(!exist){
+      this.filterFields.push(searchField);
+    }
   }
   
   deleteFilterFields = ({ key, value }) => {

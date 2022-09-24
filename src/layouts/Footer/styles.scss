@@ -1,10 +1,25 @@
+@import '../../styles/variables.scss';
+
 .footer {
   display: flex;
   flex-direction: column;
-  height: 120px;
+  align-items: center;
+  z-index: 10;
+  padding-bottom: 20px;
   
   &__title {
-    height: 60px;
     align-self: center;
+    font-family: 'DistantGalaxy';
+    color: $yellow-app;
+    font-size: 40px;
+    margin: 20px 0 ;
+  }
+  &__apps {
+    width: 50px;
+    display: flex;
+    justify-content: space-between;
+    a {
+      color: white;
+    }
   }
 }

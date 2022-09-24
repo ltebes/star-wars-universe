@@ -1,0 +1,32 @@
+.dropdown {
+  &__value {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-left: 5px;
+    }
+  }
+  &__panel {
+    position: relative;
+  }
+  &__items {
+    position: absolute;
+    background-color: gray;
+    margin-left: 10px;
+    width: 78px;
+    box-shadow: 3px 5px 3px 0px black;
+  }
+  &__item {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 0 10px 5px;
+    border-top: 1px solid black;
+    cursor: pointer;
+    
+    &[disabled] {
+      background-color: lightgray;
+      color: black;
+      cursor: inherit;
+    }
+  }
+}

@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Table from '../../components/Table';
+import { Table } from '../../components';
 import { getPlanetbyId, getAllResidents } from '../../services';
-import { delay, getResidentId, parseRows } from '../../utils';
-import { residentsColumns, residentsSkeletonData } from '../../config';
-
+import { getResidentId, parseRows, promiseWithMinimumDelay } from '../../utils';
+import { residentsColumns } from '../../config';
+import Skeleton from 'react-loading-skeleton';
 import './styles.scss';
 
 const Planet = ({ StarWarsStore }) => {
@@ -23,7 +23,7 @@ const Planet = ({ StarWarsStore }) => {
   }, [id, navigate, setPlanetAndResidents]);
   
   const getResidents = useCallback(async() => {
-    const [ residents ] = await Promise.all([getAllResidents(planetSelected.residents), delay(3000)]);
+    const residents = await promiseWithMinimumDelay(() => getAllResidents(planetSelected.residents), 2000);
     setResidents(residents);
   }, [planetSelected?.residents, setResidents]);
 
@@ -35,23 +35,61 @@ const Planet = ({ StarWarsStore }) => {
     }
   }, [getPlanetAndResidents, getResidents, planetSelected]);
 
-  
-  console.log("StarWarsStore: ", {StarWarsStore});
-  console.log("planet: ", {planetSelected});
-  console.log("residents: ", {residents});
 
   const handleClick = resident => {
-    console.log("resident selected:: ", resident);
     setResidentSelected(resident);
     navigate(`/resident/${getResidentId(resident.url)}`)
   }
 
   return (
-    <>
-      {planetSelected?.residents.length === 0 ? <h1>Sin Residentes</h1> :
-        <Table columns={residentsColumns} data={residents.length ? parseRows(residents, handleClick) : residentsSkeletonData} />
+    <div className='planet'>
+      {planetSelected ? 
+        <>
+          <h2>Planet {planetSelected.name}</h2>
+          <div className='planet__info'>
+            <div className='planet__info-column'>
+                <div><h3>Climate: </h3><h5>{planetSelected.climate}</h5></div>
+                <div><h3>Gravity: </h3><h5>{planetSelected.gravity}</h5></div>
+                <div><h3>Terrain: </h3><h5>{planetSelected.terrain}</h5></div>
+                <div><h3>Population: </h3><h5>{planetSelected.population}</h5></div>
+            </div>
+            <div className='planet__table'>
+              {(planetSelected.residents.length === residents.length) ?
+                <>
+                  {planetSelected.residents.length === 0 ?
+                    <h3>Without significative residents</h3> :
+                    <>
+                      <h3>Significative residents:</h3>
+                      <Table columns={residentsColumns} data={parseRows(residents, handleClick)} />
+                    </>
+                  }
+                </> :
+                <div className="planet__skeleton-only-table">
+                  <Skeleton className="planet__skeleton-only-table-first-row" />
+                  <Table columns={residentsColumns} data={[]} />
+                  <Skeleton className="planet__skeleton-only-table-rows" count={5} />
+                </div>
+              }
+            </div>
+          </div>
+        </> : 
+        <div className="planet__skeleton">
+          <div className="planet__skeleton-title">
+            <Skeleton className="planet__skeleton-title-row" />
+          </div>
+          <div className="planet__skeleton-info">
+            <div className="planet__skeleton-info-column">
+              <Skeleton className="planet__skeleton-info-column-row" count={4} />
+            </div>
+            <div className="planet__skeleton-table">
+              <Skeleton className="planet__skeleton-table-first-row"/>
+              <Table columns={residentsColumns} data={[]} />
+              <Skeleton className="planet__skeleton-table-rows" count={5} />
+            </div>
+          </div>
+        </div>
       }
-    </>
+    </div>
   )
 }
 

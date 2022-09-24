@@ -1,0 +1,15 @@
+@import '../../styles/variables.scss';
+
+.welcome {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    font-family: 'DistantGalaxy';
+    color: $yellow-app;
+    font-size: 80px;
+  }
+}

@@ -1,5 +1,5 @@
 import { FiChevronRight as Chevron } from "react-icons/fi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
 import { APP_NAME } from "../../config";
 import './styles.scss';
@@ -37,13 +37,14 @@ const Breadcrumb = ({ levels, className }) => {
 
 const Header = ({ StarWarsStore ={} }) => {
   const { planetSelected, residentSelected } = StarWarsStore;
-  let { pathname } = useLocation();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const conditionToShow = pathname === '/';
+  const conditionToNotShowBreadcrumb = pathname === '/not-found' || pathname === '/dashboard';
 
   const levels = [
     {text: 'All Planets', id: 0, to: '/dashboard', disabled: pathname.includes('dashboard') },
-  ]
-
-  console.log("falopita: ", {planetSelected, residentSelected});
+  ];
 
   if(planetSelected && pathname.includes('planet')){
     levels.push({text: planetSelected.name, id: 1, to: '/planet/1', disabled: pathname.includes('planet') })
@@ -53,9 +54,11 @@ const Header = ({ StarWarsStore ={} }) => {
   }
 
   return (
-    <div className="header">
-      <h1 className="header__title">{APP_NAME}</h1>
-      <Breadcrumb className="header__breadcrumb" levels={levels} />
+    <div className={`header ${conditionToShow ? 'not-show' : ''}`}>
+      <div className="header__title-box">
+        <h1 onClick={() => navigate('/')} className="header__title">{APP_NAME}</h1>
+      </div>
+      <Breadcrumb className={`header__breadcrumb${conditionToNotShowBreadcrumb ? ' not-show' : ''}`} levels={levels} />
     </div>
   )
 };

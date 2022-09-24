@@ -1,0 +1,10 @@
+.not-found {
+  margin-top: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__redirect-button {
+    width: 150px;
+  }
+}

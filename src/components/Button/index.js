@@ -1,6 +1,8 @@
-const Button = ({children, ...restProps}) => {
+import './styles.scss';
+
+const Button = ({className, children, ...restProps}) => {
   return (
-    <button {...restProps} >{children}</button>
+    <button className={`button ${className ?? ''}`}{...restProps} >{children}</button>
   )
 }
 
