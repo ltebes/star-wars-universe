@@ -9,14 +9,14 @@ import Skeleton from 'react-loading-skeleton';
 import './styles.scss';
 
 const Planet = ({ StarWarsStore }) => {
-  const { planetSelected, residents, setResidentSelected, setResidents, setPlanetAndResidents } = StarWarsStore;
+  const { planetSelected, residentSelected, residents, setResidentSelected, setResidents, setPlanetAndResidents } = StarWarsStore;
   const { id } = useParams();
   const navigate = useNavigate();
 
   const getPlanetAndResidents = useCallback(async() => {
     const p = await getPlanetbyId(id)
     if(!Boolean(p) || p.detail === 'Not found') {
-      navigate("/not-found");
+      return navigate("/not-found");
     }
     const r = await getAllResidents(p.residents);
     setPlanetAndResidents(p, r);
@@ -28,16 +28,19 @@ const Planet = ({ StarWarsStore }) => {
   }, [planetSelected?.residents, setResidents]);
 
   useEffect(() => {
-    if(!planetSelected) {
+    if(!Boolean(planetSelected)) {
       getPlanetAndResidents();
-    } else if (planetSelected.residents){
+    } else if (planetSelected.residents &&
+        planetSelected.residents[0] !== residents[0]?.url){
       getResidents();
     }
-  }, [getPlanetAndResidents, getResidents, planetSelected]);
+  }, [getPlanetAndResidents, getResidents, planetSelected, residents]);
 
 
   const handleClick = resident => {
-    setResidentSelected(resident);
+    if (residentSelected?.url !== resident.url) {
+      setResidentSelected(resident);
+    }
     navigate(`/resident/${getResidentId(resident.url)}`)
   }
 

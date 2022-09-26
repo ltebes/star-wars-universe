@@ -9,7 +9,7 @@ const Router = () => {
       <Route path="/planet/:id" element={ <Planet /> } />
       <Route path="/resident/:id" element={ <Resident /> } />
       <Route path="/not-found" element={ <NotFound /> } />
-      <Route path="/*" element={ <Navigate to="/dashboard" replace /> } />
+      <Route path="/*" element={ <Navigate to="/not-found" replace /> } />
     </Routes>
   )
 }

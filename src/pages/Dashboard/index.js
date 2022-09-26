@@ -18,14 +18,15 @@ const Dashboard = ({ StarWarsStore }) => {
   }, [setPlanets]);
   
   useEffect(() => {
-    getPlanets();
-  }, [getPlanets]);
+    if(planets.length === 0) {
+      getPlanets();
+    }
+  }, [getPlanets, planets]);
   
   const handleClick = planet => {
-    if(!Boolean(planetSelected) || (planetSelected.name !== planet.name)) {
+    if(planetSelected?.name !== planet.name) {
       setPlanetSelected(planet);
     }
-    console.log("planet selected:: ", planet);
     navigate(`/planet/${getPlanetId(planet.url)}`)
   }
 
@@ -33,7 +34,7 @@ const Dashboard = ({ StarWarsStore }) => {
     <div className="dashboard">
       <Search />
       <div className="dashboard__table">
-      {planets.length && !filteredPlanets.length ? <h3>No results for your search</h3> : 
+      {planets.length && filteredPlanets.length === 0 ? <h3>No results for your search</h3> : 
         filteredPlanets.length ?
           <Table paginated columns={planetsColumns} data={parseRows(filteredPlanets, handleClick)} /> : (
             <>

@@ -14,14 +14,14 @@ const Resident = ({ StarWarsStore }) => {
   const getResidentAndItsPlanet = useCallback(async() => {
     const r = await getResidentById(id);
     if(!Boolean(r) || r.detail === 'Not found') {
-      navigate("/not-found")
+      return navigate("/not-found")
     }
     const p = await getPlanetbyId(getPlanetId(r.homeworld));
     setPlanetAndResidentSelected(r, p);
   }, [id, navigate, setPlanetAndResidentSelected]);
 
   useEffect(() => {
-    if(!residentSelected) {
+    if(!Boolean(residentSelected)) {
       getResidentAndItsPlanet();
     }
   }, [getResidentAndItsPlanet, residentSelected]);
